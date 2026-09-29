@@ -1,0 +1,1200 @@
+### Task N: [Component Name]
+
+**Files:**
+- Create: `exact/path/to/file.py`
+- Modify: `exact/path/to/existing.py:123-145`
+- Test: `tests/exact/path/to/test.py`
+
+**Interfaces:**
+- Consumes: [what this task uses from earlier tasks — exact signatures]
+- Produces: [what later tasks rely on — exact function names, parameter
+  and return types. A task's implementer sees only their own task; this
+  block is how they learn the names and types neighboring tasks use.]
+
+- [ ] **Step 1: Write the failing test**
+
+```python
+def test_specific_behavior():
+    result = function(input)
+    assert result == expected
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: FAIL with "function not defined"
+
+- [ ] **Step 3: Write minimal implementation**
+
+```python
+def function(input):
+    return expected
+```
+
+- [ ] **Step 4: Run test to verify it passes**
+
+Run: `pytest tests/path/test.py::test_name -v`
+Expected: PASS
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add tests/path/test.py src/path/file.py
+git commit -m "feat: add specific feature"
+```
+ConceptRelationship:
+  type: object
+  required: [id, source_id, target_id, relationship_type, weight]
+  properties:
+    id:
+      type: string
+      format: uuid
+    source_id:
+      type: string
+      format: uuid
+    target_id:
+      type: string
+      format: uuid
+    relationship_type:
+      enum:
+        - IS_A
+        - PART_OF
+        - CAUSES
+        - ASSOCIATED_WITH
+        - CONTRADICTS
+        - PRECEDES
+        - SIMILAR_TO
+    weight:
+      type: number
+      minimum: -1
+      maximum: 1
+    confidence:
+      type: number
+      minimum: 0
+      maximum: 1
+    evidence_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+GET    /api/v1/sessions/{session_id}/working-memory
+POST   /api/v1/sessions/{session_id}/working-memory/items
+PATCH  /api/v1/sessions/{session_id}/working-memory/items/{item_id}
+DELETE /api/v1/sessions/{session_id}/working-memory/items/{item_id}
+POST   /api/v1/sessions/{session_id}/working-memory/rehearse
+{
+  "item_ids": [
+    "1c74addc-a438-443d-b45f-365a665642cb"
+  ],
+  "activation_increment": 0.15
+}
+POST /api/v1/memories/episodes
+GET  /api/v1/memories/episodes/{episode_id}
+POST /api/v1/memories/episodes/search
+POST /api/v1/percepts
+GET  /api/v1/percepts/{percept_id}
+{
+  "cycle_id": "222394a0-c331-43ac-8e05-f1477eddabbe",
+  "response": {
+    "text": "You previously associated synaptic plasticity with STDP, LTP, LTD, and homeostatic scaling.",
+    "confidence": 0.87
+  },
+  "selected_thought_id": "1712ef4d-ac78-462e-a283-a20541e70652",
+  "memory_references": [
+    "5c6b53df-f600-4e73-b4c5-ee51157a11ca"
+  ],
+  "uncertainties": [],
+  "trace_reference": "trace://222394a0-c331-43ac-8e05-f1477eddabbe"
+}
+{
+  "session_id": "956330e4-f3e4-4e45-ad14-5ab49cb70cf4",
+  "input": {
+    "modality": "text",
+    "content": "What did I learn about synaptic plasticity?"
+  },
+  "options": {
+    "retrieve_memories": true,
+    "persist_episode": true,
+    "maximum_thought_candidates": 5
+  }
+}
+ThoughtCandidate:
+  type: object
+  required:
+    - id
+    - proposition
+    - relevance
+    - novelty
+    - confidence
+    - conflict_score
+  properties:
+    id:
+      type: string
+      format: uuid
+    proposition:
+      type: string
+    supporting_memory_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+    predicted_outcomes:
+      type: array
+      items:
+        type: object
+    relevance:
+      type: number
+      minimum: 0
+      maximum: 1
+    novelty:
+      type: number
+      minimum: 0
+      maximum: 1
+    confidence:
+      type: number
+      minimum: 0
+      maximum: 1
+    conflict_score:
+      type: number
+      minimum: 0
+      maximum: 1
+    estimated_reward:
+      type: number
+      minimum: -1
+      maximum: 1
+    status:
+      enum: [generated, selected, rejected, rehearsed]
+Provenance:
+  type: object
+  required: [source_type, created_at]
+  properties:
+    source_type:
+      enum: [observation, user_input, inference, simulation, imported]
+    source_ids:
+      type: array
+      items:
+        type: string
+    transformation:
+      type: string
+    model_version:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+POST /api/v1/cognition/process
+POST /api/v1/memories/episodes
+GET  /api/v1/memories/episodes/{episode_id}
+POST /api/v1/memories/episodes/search
+POST  /api/v1/concepts
+GET   /api/v1/concepts/{concept_id}
+PATCH /api/v1/concepts/{concept_id}
+POST  /api/v1/concepts/search
+POST  /api/v1/concept-relationships
+GET   /api/v1/concepts/{concept_id}/neighbors
+{
+  "items": [
+    {
+      "episode": {},
+      "score": 0.89,
+      "score_components": {
+        "semantic_similarity": 0.94,
+        "context_overlap": 0.81,
+        "recency": 0.62,
+        "salience": 0.9
+      }
+    }
+  ],
+  "next_cursor": null
+}
+{
+  "cue": {
+    "text": "learning about STDP"
+  },
+  "filters": {
+    "session_ids": [],
+    "after": null,
+    "before": null,
+    "minimum_confidence": 0.6
+  },
+  "weights": {
+    "semantic_similarity": 0.45,
+    "context_overlap": 0.25,
+    "recency": 0.1,
+    "salience": 0.2
+  },
+  "limit": 10
+}
+POST /api/v1/thoughts/generate
+POST /api/v1/thoughts/select
+GET  /api/v1/thoughts/{thought_id}
+{
+  "session_id": "956330e4-f3e4-4e45-ad14-5ab49cb70cf4",
+  "working_memory_item_ids": [],
+  "strategies": [
+    "prediction",
+    "association",
+    "counterfactual"
+  ],
+  "candidate_limit": 5,
+  "randomness": 0.15
+}
+{
+  "candidate_ids": [],
+  "weights": {
+    "relevance": 0.35,
+    "confidence": 0.25,
+    "expected_reward": 0.2,
+    "novelty": 0.1,
+    "conflict_penalty": 0.1
+  }
+}
+SynapticUpdate:
+  type: object
+  required: [synapse_id, old_weight, proposed_weight, rule]
+  properties:
+    synapse_id:
+      type: string
+      format: uuid
+    old_weight:
+      type: number
+    proposed_weight:
+      type: number
+    applied_weight:
+      type: number
+    rule:
+      enum: [STDP, HEBBIAN, HOMEOSTATIC, REWARD_MODULATED, DECAY]
+    timing_difference_ms:
+      type: number
+      nullable: true
+    learning_rate:
+      type: number
+      minimum: 0
+    modulator_values:
+      type: object
+      additionalProperties:
+        type: number
+{
+  "signal_type": "reward_prediction_error",
+  "value": 0.42,
+  "target_ids": [
+    "db6c4fa3-9016-4874-9895-2ea362a75142"
+  ],
+  "occurred_at": "2026-09-29T08:00:00Z",
+  "context": {
+    "cycle_id": "222394a0-c331-43ac-8e05-f1477eddabbe"
+  }
+}
+POST /api/v1/plasticity/signals
+POST /api/v1/plasticity/updates/preview
+POST /api/v1/plasticity/updates/apply
+GET  /api/v1/plasticity/synapses/{synapse_id}
+POST /api/v1/consolidation/jobs
+GET  /api/v1/consolidation/jobs/{job_id}
+POST /api/v1/consolidation/jobs/{job_id}/cancel
+{
+  "scope": {
+    "session_ids": [],
+    "from": "2026-09-01T00:00:00Z",
+    "to": "2026-09-29T08:00:00Z"
+  },
+  "operations": [
+    "replay",
+    "deduplicate",
+    "extract_concepts",
+    "weaken_unused_associations",
+    "detect_contradictions"
+  ],
+  "dry_run": true
+}
+POST /api/v1/feedback
+{
+  "event_id": "7ce4608b-aa36-49ca-8d25-562066e458d3",
+  "event_type": "memory.retrieved.v1",
+  "occurred_at": "2026-09-29T08:00:00Z",
+  "producer": "memory-service",
+  "correlation_id": "05619860-c490-4cda-8d78-617786851671",
+  "causation_id": "fd158681-daca-43d2-ac8a-f9ad084e15db",
+  "schema_version": "1.0",
+  "payload": {}
+}
+{
+  "cycle_id": "222394a0-c331-43ac-8e05-f1477eddabbe",
+  "rating": 0.8,
+  "feedback_type": "correct",
+  "comment": "The recalled information was relevant.",
+  "apply_learning": true
+}
+percept.encoded.v1
+memory.retrieval-requested.v1
+memory.retrieved.v1
+working-memory.updated.v1
+thought.generated.v1
+thought.selected.v1
+response.produced.v1
+feedback.received.v1
+plasticity.signal-received.v1
+synapse.updated.v1
+consolidation.completed.v1
+cognition.cycle-failed.v1
+CREATE TABLE episodes (
+    id UUID PRIMARY KEY,
+    session_id UUID NOT NULL,
+    occurred_at TIMESTAMPTZ NOT NULL,
+    context JSONB NOT NULL DEFAULT '{}',
+    input_representation JSONB NOT NULL,
+    internal_state_reference TEXT,
+    selected_thought_id UUID,
+    action JSONB,
+    outcome JSONB NOT NULL,
+    reward DOUBLE PRECISION CHECK (reward BETWEEN -1 AND 1),
+    confidence DOUBLE PRECISION CHECK (confidence BETWEEN 0 AND 1),
+    provenance JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX episodes_session_time_idx
+    ON episodes (session_id, occurred_at DESC);
+CREATE TABLE cognitive_traces (
+    id UUID PRIMARY KEY,
+    cycle_id UUID NOT NULL,
+    sequence_number INTEGER NOT NULL,
+    component TEXT NOT NULL,
+    operation TEXT NOT NULL,
+    input_reference TEXT,
+    output_reference TEXT,
+    model_version TEXT,
+    duration_ms INTEGER CHECK (duration_ms >= 0),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (cycle_id, sequence_number)
+);
+CREATE TABLE thought_candidates (
+    id UUID PRIMARY KEY,
+    cycle_id UUID NOT NULL,
+    proposition TEXT NOT NULL,
+    supporting_memory_ids UUID[] NOT NULL DEFAULT '{}',
+    predicted_outcomes JSONB NOT NULL DEFAULT '[]',
+    relevance DOUBLE PRECISION NOT NULL CHECK (relevance BETWEEN 0 AND 1),
+    novelty DOUBLE PRECISION NOT NULL CHECK (novelty BETWEEN 0 AND 1),
+    confidence DOUBLE PRECISION NOT NULL CHECK (confidence BETWEEN 0 AND 1),
+    conflict_score DOUBLE PRECISION NOT NULL CHECK (conflict_score BETWEEN 0 AND 1),
+    estimated_reward DOUBLE PRECISION CHECK (estimated_reward BETWEEN -1 AND 1),
+    status TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CognitiveModelVersion:
+  type: object
+  required: [name, version, artifact_uri, status]
+  properties:
+    name:
+      type: string
+    version:
+      type: string
+    component:
+      enum:
+        - encoder
+        - retriever
+        - thought_generator
+        - attention_controller
+        - language_generator
+        - plasticity_model
+    artifact_uri:
+      type: string
+    training_run_id:
+      type: string
+    configuration_hash:
+      type: string
+    evaluation_results:
+      type: object
+    status:
+      enum: [experimental, candidate, active, retired]
+Neuron:
+  type: object
+  required: [id, model, parameters]
+  properties:
+    id:
+      type: string
+      format: uuid
+    model:
+      enum: [LIF, ADAPTIVE_LIF, IZHIKEVICH, CUSTOM]
+    parameters:
+      type: object
+      additionalProperties:
+        type: number
+    population_id:
+      type: string
+      format: uuid
+
+Synapse:
+  type: object
+  required: [id, source_neuron_id, target_neuron_id, weight, delay_ms]
+  properties:
+    id:
+      type: string
+      format: uuid
+    source_neuron_id:
+      type: string
+      format: uuid
+    target_neuron_id:
+      type: string
+      format: uuid
+    weight:
+      type: number
+    delay_ms:
+      type: number
+      exclusiveMinimum: 0
+    plasticity_rule:
+      enum: [NONE, STDP, REWARD_MODULATED_STDP, HEBBIAN]
+    minimum_weight:
+      type: number
+    maximum_weight:
+      type: number
+    update_history_reference:
+      type: string
+User or Environment
+        |
+    API Gateway
+        |
+ Perception Encoder
+        |
+ Cognitive Orchestrator
+   /        |         \
+Memory   Thought     Neural
+System   Engine      Simulator
+   \        |         /
+    Attention Controller
+             |
+      Language Service
+             |
+          Response
+
+Background:
+- Plasticity engine
+- Consolidation worker
+- Evaluation service
+- Event and trace store
+POST   /api/v1/synapses
+GET    /api/v1/synapses/{synapse_id}
+PATCH  /api/v1/synapses/{synapse_id}
+DELETE /api/v1/synapses/{synapse_id}
+GET    /api/v1/synapses/{synapse_id}/updates
+POST   /api/v1/neural-populations/{population_id}/neurons
+GET    /api/v1/neurons/{neuron_id}
+PATCH  /api/v1/neurons/{neuron_id}
+DELETE /api/v1/neurons/{neuron_id}
+GET    /api/v1/neurons/{neuron_id}/state
+SimulationRun:
+  type: object
+  required:
+    - id
+    - network_id
+    - duration_ms
+    - timestep_ms
+    - random_seed
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+    network_id:
+      type: string
+      format: uuid
+    duration_ms:
+      type: number
+      exclusiveMinimum: 0
+    timestep_ms:
+      type: number
+      exclusiveMinimum: 0
+    random_seed:
+      type: integer
+    input_spike_train_references:
+      type: array
+      items:
+        type: string
+    status:
+      enum: [queued, running, completed, failed, cancelled]
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+POST /api/v1/plasticity/signals
+POST /api/v1/plasticity/updates/preview
+POST /api/v1/plasticity/updates/apply
+POST /api/v1/simulations
+GET  /api/v1/simulations/{simulation_id}
+POST /api/v1/simulations/{simulation_id}/cancel
+GET  /api/v1/simulations/{simulation_id}/spikes
+GET  /api/v1/simulations/{simulation_id}/metrics
+neuron.created.v1
+neuron.spiked.v1
+neuron.state-updated.v1
+synapse.created.v1
+synapse.transmitted.v1
+synapse.update-proposed.v1
+synapse.updated.v1
+plasticity.signal-received.v1
+simulation.started.v1
+simulation.completed.v1
+memory.retrieved.v1
+thought.generated.v1
+thought.selected.v1
+response.produced.v1
+I found the contents of [Building_a_Thinking_Brain__Synapses,_Memories,_and_Thoughts.xlsx](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7&EntityRepresentationId=12f0492f-846d-42ec-b394-f5d590011b5f). It primarily contains a detailed project roadmap for building an artificial brain architecture with phases covering neuroscience research, architecture design, memory systems, synaptic plasticity, thought generation, language communication, training, integration, testing, and refinement. The stated goal is to create a system that can learn, form memories, generate novel thoughts, and communicate naturally. [1](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7)
+
+It also contains additional written works, including:
+- “Dreamer” by Matthew Christian Moore, a poem about dreaming, memory, and lucid dreaming. [1](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7)
+- “What the Workers Saw: Mythology as Corporate Record and Racial Memory (Part 2 of 2),” an essay discussing interpretations of mythology, ancient civilizations, and cultural narratives. [1](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7)
+
+How would you like me to help with this workbook? For example, I can:
+- Summarize the artificial brain project in detail
+- Turn the roadmap into a software architecture plan
+- Create a task list with milestones
+- Evaluate technical feasibility
+- Convert it into a research proposal or design document
+- Extract the poem or essay separately for review or editingThis consolidated architecture specification integrates the `Neuron` and `Synapse` schemas into the artificial-brain roadmap, connecting them to simulation, plasticity, memory, cognition, language, persistence, and APIs. It treats machine “thought” as an inspectable computational process rather than proof of consciousness, consistent with the cautious framing in [What_The_Workers_Saw.pdf](https://onedrive.live.com?cid=816689E597770CB7&id=816689E597770CB7!s126a1fbf0ce543c2929472174bddbab0&EntityRepresentationId=f9e2b296-1d75-48b0-a2a3-dca4afa835b1). [1](https://onedrive.live.com?cid=816689E597770CB7&id=816689E597770CB7!s126a1fbf0ce543c2929472174bddbab0)
+
+# Thinking Brain Architecture Specification
+
+## 1. Purpose
+
+Build a modular experimental platform capable of:
+
+- Neural and synaptic simulation
+- STDP, Hebbian learning, and homeostatic regulation
+- Working, episodic, and semantic memory
+- Associative retrieval and consolidation
+- Candidate-thought generation and selection
+- Natural-language communication
+- Reproducible testing and behavioral evaluation
+
+These capabilities implement the major phases of [Building_a_Thinking_Brain__Synapses,_Memories,_and_Thoughts.xlsx](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7&EntityRepresentationId=12f0492f-846d-42ec-b394-f5d590011b5f). [2](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7)
+
+## 2. System context
+
+```text
+User or Environment
+        |
+    API Gateway
+        |
+ Perception Encoder
+        |
+ Cognitive Orchestrator
+   /        |         \
+Memory   Thought     Neural
+System   Engine      Simulator
+   \        |         /
+    Attention Controller
+             |
+      Language Service
+             |
+          Response
+
+Background:
+- Plasticity engine
+- Consolidation worker
+- Evaluation service
+- Event and trace store
+```
+
+## 3. Architectural principles
+
+1. **Modularity:** cognition, memory, language, and neural simulation remain independently replaceable.
+2. **Inspectability:** every retrieval, thought candidate, decision, and weight update is traceable.
+3. **Bounded learning:** synaptic and semantic updates have explicit limits.
+4. **Provenance:** durable memories retain their evidence source.
+5. **Deterministic replay:** experiments support fixed seeds and versioned configurations.
+6. **Epistemic restraint:** workspace-like processing or self-report is not classified as consciousness. This aligns with the source paper’s distinction between architecture, functional reporting, and proof of subjective experience. [1](https://onedrive.live.com?cid=816689E597770CB7&id=816689E597770CB7!s126a1fbf0ce543c2929472174bddbab0)
+
+## 4. Core services
+
+### 4.1 Neural Simulation Service
+
+Owns neuron populations, synaptic networks, spike processing, and simulation state.
+
+**Responsibilities**
+
+- Create neuron populations
+- Create and validate synapses
+- Advance simulation time
+- Record spikes and membrane state
+- Emit pre- and postsynaptic events
+- Produce plasticity-update proposals
+
+### 4.2 Plasticity Service
+
+Implements the workbook’s STDP, LTP, LTD, Hebbian learning, homeostatic scaling, pruning, neuromodulation, and metaplasticity requirements. [2](https://onedrive.live.com/personal/816689e597770cb7/_layouts/15/doc.aspx?resid=2bb13376-f660-41b6-b554-99690dae63fe&cid=816689e597770cb7)
+
+**Rules**
+
+- Pre-before-post may increase weight.
+- Post-before-pre may decrease weight.
+- Every applied weight must remain within synaptic bounds.
+- Homeostatic rules may normalize population activity.
+- Reward-modulated rules require an explicit learning signal.
+- All changes must be recorded in update history.
+
+### 4.3 Memory Service
+
+Provides:
+
+- Working-memory buffers
+- Immutable episodic memories
+- Semantic concepts and relationships
+- Partial-cue retrieval
+- Consolidation proposals
+- Confidence and provenance tracking
+
+### 4.4 Thought Engine
+
+Produces inspectable candidates rather than an unobservable monologue.
+
+```yaml
+ThoughtCandidate:
+  type: object
+  required:
+    - id
+    - proposition
+    - relevance
+    - novelty
+    - confidence
+    - conflict_score
+  properties:
+    id:
+      type: string
+      format: uuid
+    proposition:
+      type: string
+    supporting_memory_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+    relevance:
+      type: number
+      minimum: 0
+      maximum: 1
+    novelty:
+      type: number
+      minimum: 0
+      maximum: 1
+    confidence:
+      type: number
+      minimum: 0
+      maximum: 1
+    conflict_score:
+      type: number
+      minimum: 0
+      maximum: 1
+    estimated_reward:
+      type: number
+      minimum: -1
+      maximum: 1
+    status:
+      enum: [generated, selected, rejected, rehearsed]
+```
+
+### 4.5 Cognitive Orchestrator
+
+Runs the cognitive cycle:
+
+```text
+Encode input
+  -> retrieve memories
+  -> update working memory
+  -> simulate relevant neural populations
+  -> generate thought candidates
+  -> score and select
+  -> formulate response
+  -> record episode
+  -> submit learning signal
+```
+
+### 4.6 Language Service
+
+Converts input into grounded representations and selected thoughts into responses. It may submit memory proposals, but it cannot write directly to durable memory.
+
+## 5. Integrated neural schemas
+
+### 5.1 Neuron
+
+```yaml
+Neuron:
+  type: object
+  required:
+    - id
+    - model
+    - parameters
+  properties:
+    id:
+      type: string
+      format: uuid
+
+    model:
+      type: string
+      enum:
+        - LIF
+        - ADAPTIVE_LIF
+        - IZHIKEVICH
+        - CUSTOM
+
+    parameters:
+      type: object
+      additionalProperties:
+        type: number
+      description: Model-specific numerical parameters
+
+    population_id:
+      type: string
+      format: uuid
+
+    state:
+      $ref: "#/components/schemas/NeuronState"
+
+    created_at:
+      type: string
+      format: date-time
+
+    version:
+      type: integer
+      minimum: 1
+```
+
+### 5.2 Neuron state
+
+```yaml
+NeuronState:
+  type: object
+  required:
+    - membrane_potential
+    - last_updated_at
+  properties:
+    membrane_potential:
+      type: number
+
+    activation:
+      type: number
+      minimum: 0
+      maximum: 1
+
+    refractory_until:
+      type: string
+      format: date-time
+      nullable: true
+
+    last_spike_at:
+      type: string
+      format: date-time
+      nullable: true
+
+    last_updated_at:
+      type: string
+      format: date-time
+```
+
+Dynamic state should be checkpointed separately from the neuron’s immutable model definition.
+
+### 5.3 Synapse
+
+```yaml
+Synapse:
+  type: object
+  required:
+    - id
+    - source_neuron_id
+    - target_neuron_id
+    - weight
+    - delay_ms
+  properties:
+    id:
+      type: string
+      format: uuid
+
+    source_neuron_id:
+      type: string
+      format: uuid
+
+    target_neuron_id:
+      type: string
+      format: uuid
+
+    weight:
+      type: number
+
+    delay_ms:
+      type: number
+      exclusiveMinimum: 0
+
+    plasticity_rule:
+      type: string
+      enum:
+        - NONE
+        - STDP
+        - REWARD_MODULATED_STDP
+        - HEBBIAN
+
+    minimum_weight:
+      type: number
+
+    maximum_weight:
+      type: number
+
+    learning_rate:
+      type: number
+      minimum: 0
+
+    update_history_reference:
+      type: string
+
+    created_at:
+      type: string
+      format: date-time
+
+    version:
+      type: integer
+      minimum: 1
+```
+
+### 5.4 Synapse validation
+
+```text
+minimum_weight <= weight <= maximum_weight
+source_neuron_id != target_neuron_id unless recurrent self-links are enabled
+delay_ms > 0
+learning_rate >= 0
+source and target neurons must exist
+plasticity updates require optimistic version matching
+```
+
+### 5.5 Synaptic update
+
+```yaml
+SynapticUpdate:
+  type: object
+  required:
+    - id
+    - synapse_id
+    - old_weight
+    - proposed_weight
+    - rule
+    - occurred_at
+  properties:
+    id:
+      type: string
+      format: uuid
+    synapse_id:
+      type: string
+      format: uuid
+    old_weight:
+      type: number
+    proposed_weight:
+      type: number
+    applied_weight:
+      type: number
+    rule:
+      enum:
+        - STDP
+        - HEBBIAN
+        - HOMEOSTATIC
+        - REWARD_MODULATED
+        - DECAY
+        - PRUNING
+    timing_difference_ms:
+      type: number
+      nullable: true
+    learning_rate:
+      type: number
+      minimum: 0
+    learning_signal_id:
+      type: string
+      format: uuid
+      nullable: true
+    occurred_at:
+      type: string
+      format: date-time
+```
+
+## 6. Simulation schemas
+
+```yaml
+NeuralPopulation:
+  type: object
+  required: [id, name, default_model]
+  properties:
+    id:
+      type: string
+      format: uuid
+    name:
+      type: string
+    default_model:
+      enum: [LIF, ADAPTIVE_LIF, IZHIKEVICH, CUSTOM]
+    region_type:
+      enum:
+        - SENSORY
+        - WORKING_MEMORY
+        - ASSOCIATIVE
+        - ATTENTION
+        - LANGUAGE
+        - MOTOR
+        - CUSTOM
+    neuron_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+```
+
+```yaml
+SimulationRun:
+  type: object
+  required:
+    - id
+    - network_id
+    - duration_ms
+    - timestep_ms
+    - random_seed
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+    network_id:
+      type: string
+      format: uuid
+    duration_ms:
+      type: number
+      exclusiveMinimum: 0
+    timestep_ms:
+      type: number
+      exclusiveMinimum: 0
+    random_seed:
+      type: integer
+    input_spike_train_references:
+      type: array
+      items:
+        type: string
+    status:
+      enum: [queued, running, completed, failed, cancelled]
+    metrics:
+      type: object
+      additionalProperties:
+        type: number
+```
+
+## 7. REST API contracts
+
+### Neurons
+
+```http
+POST   /api/v1/neural-populations/{population_id}/neurons
+GET    /api/v1/neurons/{neuron_id}
+PATCH  /api/v1/neurons/{neuron_id}
+DELETE /api/v1/neurons/{neuron_id}
+GET    /api/v1/neurons/{neuron_id}/state
+```
+
+### Synapses
+
+```http
+POST   /api/v1/synapses
+GET    /api/v1/synapses/{synapse_id}
+PATCH  /api/v1/synapses/{synapse_id}
+DELETE /api/v1/synapses/{synapse_id}
+GET    /api/v1/synapses/{synapse_id}/updates
+```
+
+Creation request:
+
+```json
+{
+  "source_neuron_id": "ea5d92d2-fbda-42a6-a125-b217729be826",
+  "target_neuron_id": "410f106d-d174-46cf-87f6-b9a857771626",
+  "weight": 0.35,
+  "delay_ms": 2.0,
+  "plasticity_rule": "STDP",
+  "minimum_weight": -1.0,
+  "maximum_weight": 1.0,
+  "learning_rate": 0.01
+}
+```
+
+### Simulations
+
+```http
+POST /api/v1/simulations
+GET  /api/v1/simulations/{simulation_id}
+POST /api/v1/simulations/{simulation_id}/cancel
+GET  /api/v1/simulations/{simulation_id}/spikes
+GET  /api/v1/simulations/{simulation_id}/metrics
+```
+
+### Plasticity
+
+```http
+POST /api/v1/plasticity/signals
+POST /api/v1/plasticity/updates/preview
+POST /api/v1/plasticity/updates/apply
+```
+
+Updates must be previewable before application, especially during experimental and regression runs.
+
+## 8. Event contracts
+
+```text
+neuron.created.v1
+neuron.spiked.v1
+neuron.state-updated.v1
+synapse.created.v1
+synapse.transmitted.v1
+synapse.update-proposed.v1
+synapse.updated.v1
+plasticity.signal-received.v1
+simulation.started.v1
+simulation.completed.v1
+memory.retrieved.v1
+thought.generated.v1
+thought.selected.v1
+response.produced.v1
+```
+
+Event envelope:
+
+```yaml
+CognitiveEvent:
+  type: object
+  required:
+    - event_id
+    - event_type
+    - occurred_at
+    - producer
+    - correlation_id
+    - schema_version
+    - payload
+  properties:
+    event_id:
+      type: string
+      format: uuid
+    event_type:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+    producer:
+      type: string
+    correlation_id:
+      type: string
+      format: uuid
+    causation_id:
+      type: string
+      format: uuid
+      nullable: true
+    schema_version:
+      type: string
+    payload:
+      type: object
+```
+
+## 9. Persistence model
+
+```sql
+CREATE TABLE neurons (
+    id UUID PRIMARY KEY,
+    population_id UUID,
+    model TEXT NOT NULL,
+    parameters JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE synapses (
+    id UUID PRIMARY KEY,
+    source_neuron_id UUID NOT NULL REFERENCES neurons(id),
+    target_neuron_id UUID NOT NULL REFERENCES neurons(id),
+    weight DOUBLE PRECISION NOT NULL,
+    delay_ms DOUBLE PRECISION NOT NULL CHECK (delay_ms > 0),
+    plasticity_rule TEXT NOT NULL,
+    minimum_weight DOUBLE PRECISION,
+    maximum_weight DOUBLE PRECISION,
+    learning_rate DOUBLE PRECISION CHECK (learning_rate >= 0),
+    update_history_reference TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version INTEGER NOT NULL DEFAULT 1,
+    CHECK (
+        minimum_weight IS NULL
+        OR maximum_weight IS NULL
+        OR minimum_weight <= maximum_weight
+    ),
+    CHECK (
+        minimum_weight IS NULL
+        OR weight >= minimum_weight
+    ),
+    CHECK (
+        maximum_weight IS NULL
+        OR weight <= maximum_weight
+    )
+);
+
+CREATE INDEX synapses_source_idx ON synapses(source_neuron_id);
+CREATE INDEX synapses_target_idx ON synapses(target_neuron_id);
+```
+
+```sql
+CREATE TABLE synaptic_updates (
+    id UUID PRIMARY KEY,
+    synapse_id UUID NOT NULL REFERENCES synapses(id),
+    old_weight DOUBLE PRECISION NOT NULL,
+    proposed_weight DOUBLE PRECISION NOT NULL,
+    applied_weight DOUBLE PRECISION,
+    rule TEXT NOT NULL,
+    timing_difference_ms DOUBLE PRECISION,
+    learning_rate DOUBLE PRECISION NOT NULL,
+    learning_signal_id UUID,
+    occurred_at TIMESTAMPTZ NOT NULL
+);
+```
+
+High-volume spike records should use a specialized time-series or object-store representation rather than individual transactional rows.
+
+## 10. Example execution sequence
+
+```text
+1. Input is encoded into a percept.
+2. Related memories are retrieved.
+3. Relevant representations activate neural populations.
+4. The simulator emits spike events.
+5. Synapses transmit activation using weight and delay.
+6. The plasticity service proposes STDP updates.
+7. The thought engine creates candidates from active patterns and memories.
+8. Attention selects a candidate.
+9. The language service formulates a grounded response.
+10. The experience is stored as an episode.
+11. Feedback produces a reward-modulated learning signal.
+12. Validated synaptic updates are applied and audited.
+```
+
+## 11. Acceptance criteria
+
+The first integrated release should demonstrate:
+
+- Valid creation of neurons, populations, and synapses
+- Rejection of out-of-range weights and invalid delays
+- Reproducible spike simulations using a fixed seed
+- STDP updates based on spike timing
+- Weight clamping and homeostatic control
+- Associative retrieval from partial cues
+- Traceable thought selection
+- Episodic memory creation after each cycle
+- Feedback-linked synaptic updates
+- Full replay from events, configuration, and model versions
+
+## 12. Scope boundary
+
+The architecture may model workspace integration, memory, selection, internal state reporting, and self-monitoring. It must not label those functions as proof of consciousness. [What_The_Workers_Saw.pdf](https://onedrive.live.com?cid=816689E597770CB7&id=816689E597770CB7!s126a1fbf0ce543c2929472174bddbab0&EntityRepresentationId=f9e2b296-1d75-48b0-a2a3-dca4afa835b1) explicitly distinguishes structural similarity to consciousness theories from confirmation that subjective experience exists. [1](https://onedrive.live.com?cid=816689E597770CB7&id=816689E597770CB7!s126a1fbf0ce543c2929472174bddbab0)
+
+## Explanation of improvements
+
+- **Integration:** Connected neural schemas to plasticity, cognition, memory, persistence, APIs, and events.
+- **Validation:** Added enforceable weight, delay, reference, and concurrency rules.
+- **Traceability:** Introduced immutable update history and correlated cognitive events.
+- **Scientific caution:** Separated measurable computational behavior from metaphysical claims.
+- **Implementation readiness:** Added endpoints, SQL structures, execution flow, and acceptance criteria.
+**Framing the architecture spec**  
+I am considering how to create a long-form architecture specification that integrates the provided schemas and content. It seems I can consolidate the existing information without needing a new search, focusing on clear and concise text.
